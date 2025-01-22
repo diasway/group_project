@@ -59,8 +59,10 @@ public class MyApplication {
         int age = scanner.nextInt();
         System.out.println("Please enter gender (male/female): ");
         String gender = scanner.next();
+        System.out.println("Please enter preferred genre: ");
+        String preferred_genre = scanner.next();
 
-        String response = controller.createUser(name, age, gender);
+        String response = controller.createUser(name, age, gender, preferred_genre);
         System.out.println(response);
     }
 

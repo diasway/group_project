@@ -20,12 +20,13 @@ public class UserRepository implements IUserRepository {
         Connection connection = null;
         try {
             connection = db.getConnection();
-            String sql = "INSERT INTO users(name, age, gender) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO users(user_name, user_age, user_gender, preferred_genre) VALUES (?, ?, ?, ?)";
             PreparedStatement st = connection.prepareStatement(sql);
 
-            st.setString(1, user.getName());
-            st.setInt(2, user.getAge());
-            st.setBoolean(3, user.getGender());
+            st.setString(1, user.getUser_name());
+            st.setInt(2, user.getUser_age());
+            st.setBoolean(3, user.getUser_gender());
+            st.setString(4, user.getPreferred_genre());
 
             st.execute();
 
@@ -50,7 +51,8 @@ public class UserRepository implements IUserRepository {
                 return new User(rs.getInt("id"),
                         rs.getString("name"),
                         rs.getInt("age"),
-                        rs.getBoolean("gender"));
+                        rs.getBoolean("gender"),
+                        rs.getString("preferred_genre"));
             }
         } catch (SQLException e) {
             System.out.println("sql error:" + e.getMessage());
@@ -63,7 +65,7 @@ public class UserRepository implements IUserRepository {
         Connection connection = null;
         try {
             connection = db.getConnection();
-            String sql = "SELECT id, name, age, gender FROM users";
+            String sql = "SELECT user_id, user_name, user_age, user_gender, preferred_genre FROM users";
             Statement st = connection.createStatement();
 
             ResultSet rs = st.executeQuery(sql);
@@ -72,7 +74,8 @@ public class UserRepository implements IUserRepository {
                 User user = new User(rs.getInt("id"),
                         rs.getString("name"),
                         rs.getInt("age"),
-                        rs.getBoolean("gender"));
+                        rs.getBoolean("gender"),
+                        rs.getString("preferred_genre"));
                 users.add(user);
             }
             return users;
