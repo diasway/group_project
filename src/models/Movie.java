@@ -66,4 +66,5 @@ public class Movie {
     public String toString() {
         return "id. " + movie_id +  " Movie name: " + movie_name + " movie genre: " + movie_genre + " age restriction: " + age_restriction + " rating: " + rating;
     }
+
 }
