@@ -61,15 +61,13 @@ public class User {
     public void setPreferred_genre(String preferred_genre) {
         this.preferred_genre = preferred_genre;
     }
+    private String gender_casting(){
+        if(user_gender) return "Male";
+        else return "Female";
+    }
 
     @Override
     public String toString() {
-        return "User{" +
-                "user_id=" + user_id +
-                ", user_name='" + user_name + '\'' +
-                ", user_age=" + user_age +
-                ", user_gender=" + user_gender +
-                ", preferred_genre='" + preferred_genre + '\'' +
-                '}';
+        return "id. " + user_id +  " Username: " + user_name + " age: " + user_age + " gender: " + gender_casting() + " preferred genre: " + preferred_genre;
     }
 }
