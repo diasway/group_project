@@ -13,22 +13,17 @@ public class UserController implements IUserController {
     }
 
     @Override
-    public String createUser(String name, int age, String gender, String preffered_genre, String password) {
+    public String createUser(String name, int age, String gender) {
         boolean male = gender.equalsIgnoreCase("male");
-        User user = new User(name, age, male, preffered_genre, password);
+        User user = new User(name, age, male);
         boolean created = repo.createUser(user);
         return (created) ? "User was created" : "User creation was failed";
     }
 
     @Override
-    public String getUserById(String name) {
-        User user = repo.getUserById(name);
+    public String getUserById(int id) {
+        User user = repo.getUserById(id);
         return (user == null) ? "User was not found" : user.toString();
-    }
-
-    public boolean getUserPassword(String name, String password){
-        boolean pasword_check = repo.getUserPassword(name, password);
-        return pasword_check;
     }
 
     @Override
@@ -40,5 +35,4 @@ public class UserController implements IUserController {
         }
         return response.toString();
     }
-
 }
