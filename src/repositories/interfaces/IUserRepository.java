@@ -7,10 +7,7 @@ import java.util.List;
 
 public interface IUserRepository {
     boolean createUser(User user);
-    User getUserById(int id);
+    User getUserById(String name);
     List<User> getAllUsers();
-
-    boolean createMovie(Movie movie);
-    Movie getMovieById(int movie_id);
-    List<Movie> getAllMovies();
+    boolean getUserPassword(String name, String password);
 }
