@@ -1,64 +1,84 @@
 package models;
 
 public class User {
-    private int id;
-    private String name;
-    private int age;
-    private boolean gender;
+    private int user_id;
+    private String user_name;
+    private int user_age;
+    private boolean user_gender;
+    private String preferred_genre;
+    private String password;
 
     public User() {
     }
 
-    public User(String name, int age, boolean gender) {
-        setName(name);
-        setAge(age);
-        setGender(gender);
+    public User(String user_name, int user_age, boolean user_gender, String preferred_genre, String password) {
+        setUser_name(user_name);
+        setUser_age(user_age);
+        setUser_gender(user_gender);
+        setPreferred_genre(preferred_genre);
+        setPassword(password);
     }
 
-    public User(int id, String name, int age, boolean gender) {
-        this(name, age, gender);
-        setId(id);
+    public User(int user_id, String user_name, int user_age, boolean user_gender, String preferred_genre, String password) {
+        this(user_name, user_age, user_gender, preferred_genre, password);
+        setUser_id(user_id);
     }
 
-    public int getId() {
-        return id;
+    public int getUser_id() {
+        return user_id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
     }
 
-    public String getName() {
-        return name;
+    public String getUser_name() {
+        return user_name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
     }
 
-    public int getAge() {
-        return age;
+    public int getUser_age() {
+        return user_age;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setUser_age(int user_age) {
+        this.user_age = user_age;
     }
 
-    public boolean getGender() {
-        return gender;
+    public boolean getUser_gender() {
+        return user_gender;
     }
 
-    public void setGender(boolean gender) {
-        this.gender = gender;
+    public void setUser_gender(boolean user_gender) {
+        this.user_gender = user_gender;
+    }
+
+    public String getPreferred_genre() {
+        return preferred_genre;
+    }
+
+    public void setPreferred_genre(String preferred_genre) {
+        this.preferred_genre = preferred_genre;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    private String gender_casting(){
+        if(user_gender) return "Male";
+        else return "Female";
     }
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                ", gender=" + gender +
-                '}';
+        return "id. " + user_id +  " Username: " + user_name + " age: " + user_age + " gender: " + gender_casting() + " preferred genre: " + preferred_genre;
     }
 }
