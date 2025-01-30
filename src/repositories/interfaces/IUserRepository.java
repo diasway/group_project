@@ -1,5 +1,6 @@
 package repositories.interfaces;
 
+import models.Movie;
 import models.User;
 
 import java.util.List;

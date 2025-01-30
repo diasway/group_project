@@ -38,23 +38,6 @@ public class UserRepository implements IUserRepository {
         return false;
     }
 
-    public boolean getUserPassword(String name, String password){
-        Connection connection = null;
-        try {
-            connection = db.getConnection();
-            String sql = "SELECT * FROM users WHERE user_name = ?";
-            PreparedStatement st = connection.prepareStatement(sql);
-            st.setString(1, name);
-            ResultSet rs = st.executeQuery();
-            if(rs.next() && rs.getString("password").equals(password)){
-                return true;
-            }
-        }catch (SQLException e) {
-            System.out.println("sql error:" + e.getMessage());
-        }
-        return false;
-    }
-
     @Override
     public User getUserById(String name) {
         Connection connection = null;
@@ -79,6 +62,23 @@ public class UserRepository implements IUserRepository {
         return null;
     }
 
+    public boolean getUserPassword(String name, String password){
+        Connection connection = null;
+        try {
+            connection = db.getConnection();
+            String sql = "SELECT * FROM users WHERE user_name = ?";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, name);
+            ResultSet rs = st.executeQuery();
+            if(rs.next() && rs.getString("password").equals(password)){
+                return true;
+            }
+        }catch (SQLException e) {
+            System.out.println("sql error:" + e.getMessage());
+        }
+        return false;
+    }
+
     @Override
     public List<User> getAllUsers() {
         Connection connection = null;
@@ -90,14 +90,12 @@ public class UserRepository implements IUserRepository {
             ResultSet rs = st.executeQuery(sql);
             List<User> users = new ArrayList<>();
             while (rs.next()) {
-                User user = new User(
-                        rs.getInt("user_id"),
-                        rs.getString("user_name"),
+                User user = new User(rs.getInt("user_id"),
+                rs.getString("user_name"),
                         rs.getInt("user_age"),
                         rs.getBoolean("user_gender"),
                         rs.getString("preferred_genre"),
-                        rs.getString("password")
-                );
+                        rs.getString("password"));
                 users.add(user);
             }
             return users;
