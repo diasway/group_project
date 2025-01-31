@@ -29,7 +29,7 @@ public class UserRepository implements IUserRepository {
             st.setInt(4, user.getGenre_id());
             st.setString(5, user.getPassword());
 
-            st.execute();
+            st.executeUpdate();
 
             return true;
         } catch (SQLException e) {
@@ -39,22 +39,55 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
-    public User getUserById(String name) {
+    public User getUserByName(String name) {
         Connection connection = null;
         try {
             connection = db.getConnection();
-            String sql = "SELECT * FROM users WHERE user_name = ?";
+            String sql = "SELECT u.user_id, u.user_name, u.user_age, u.user_gender, u.genre_id, u.password, g.genre_name " +
+                    "FROM users u " +
+                    "JOIN genres g ON u.genre_id = g.genre_id " +
+                    "WHERE u.user_name = ?";
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, name);
 
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
-                return new User(rs.getInt("user_id"),
+                User user = new User(rs.getInt("user_id"),
                         rs.getString("user_name"),
                         rs.getInt("user_age"),
                         rs.getBoolean("user_gender"),
                         rs.getInt("genre_id"),
                         rs.getString("password"));
+                user.setGenre_name(rs.getString("genre_name"));
+                return user;
+            }
+        } catch (SQLException e) {
+            System.out.println("sql error:" + e.getMessage());
+        }
+        return null;
+    }
+    @Override
+    public User getUserById(int id) {
+        Connection connection = null;
+        try {
+            connection = db.getConnection();
+            String sql = "SELECT u.user_id, u.user_name, u.user_age, u.user_gender, u.genre_id, u.password, g.genre_name " +
+                    "FROM users u " +
+                    "JOIN genres g ON u.genre_id = g.genre_id " +
+                    "WHERE u.user_id = ?";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, id);
+
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                User user = new User(rs.getInt("user_id"),
+                        rs.getString("user_name"),
+                        rs.getInt("user_age"),
+                        rs.getBoolean("user_gender"),
+                        rs.getInt("genre_id"),
+                        rs.getString("password"));
+                user.setGenre_name(rs.getString("genre_name"));
+                return user;
             }
         } catch (SQLException e) {
             System.out.println("sql error:" + e.getMessage());
@@ -84,18 +117,21 @@ public class UserRepository implements IUserRepository {
         Connection connection = null;
         try {
             connection = db.getConnection();
-            String sql = "SELECT user_id, user_name, user_age, user_gender, genre_id, password FROM users";
+            String sql = "SELECT u.user_id, u.user_name, u.user_age, u.user_gender, u.genre_id, u.password, g.genre_name " +
+                    "FROM users u " +
+                    "JOIN genres g ON u.genre_id = g.genre_id";
             Statement st = connection.createStatement();
 
             ResultSet rs = st.executeQuery(sql);
             List<User> users = new ArrayList<>();
             while (rs.next()) {
                 User user = new User(rs.getInt("user_id"),
-                rs.getString("user_name"),
+                        rs.getString("user_name"),
                         rs.getInt("user_age"),
                         rs.getBoolean("user_gender"),
                         rs.getInt("genre_id"),
                         rs.getString("password"));
+                user.setGenre_name(rs.getString("genre_name"));
                 users.add(user);
             }
             return users;

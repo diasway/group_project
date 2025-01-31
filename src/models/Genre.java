@@ -33,10 +33,7 @@ public class Genre {
 
     @Override
     public String toString() {
-        return "Genre{" +
-                "id=" + genre_id +
-                ", genreName='" + genre_name + '\'' +
-                '}';
+        return String.format("Genre ID: %-4d | Name: %-15s", genre_id, genre_name);
     }
 }
 

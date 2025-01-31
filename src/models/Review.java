@@ -5,7 +5,7 @@ public class Review {
     private int movieId;
     private int userId;
     private String reviewText;
-
+    private String userName;
     public Review() {
     }
 
@@ -17,6 +17,11 @@ public class Review {
 
     public Review(int id, int movieId, int userId, String reviewText) {
         this(movieId, userId, reviewText);
+        setId(id);
+    }
+    public Review(int id, int movieId, int userId, String reviewText, String userName) {
+        this(movieId, userId, reviewText);
+        this.userName = userName;
         setId(id);
     }
 
@@ -52,13 +57,16 @@ public class Review {
         this.reviewText = reviewText;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     @Override
     public String toString() {
-        return "Review{" +
-                "id=" + id +
-                ", movieId=" + movieId +
-                ", userId=" + userId +
-                ", reviewText='" + reviewText + '\'' +
-                '}';
+        return "User: " + userName + "\n" + "Review: " + reviewText + "\n----------------------------------------";
     }
 }

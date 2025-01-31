@@ -21,22 +21,6 @@ public class ReviewController implements IReviewController {
     }
 
     @Override
-    public String getReviewById(int id) {
-        Review review = repo.getReviewById(id);
-        return (review == null) ? "Review was not found" : review.toString();
-    }
-
-    @Override
-    public String getAllReviews() {
-        List<Review> reviews = repo.getAllReviews();
-        StringBuilder response = new StringBuilder();
-        for (Review review : reviews) {
-            response.append(review.toString()).append("\n");
-        }
-        return response.toString();
-    }
-
-    @Override
     public String getReviewsByMovieId(int movieId) {
         List<Review> reviews = repo.getReviewsByMovieId(movieId);
         StringBuilder response = new StringBuilder();

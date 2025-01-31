@@ -2,11 +2,9 @@ import controllers.interfaces.ICurrentUserController;
 import controllers.interfaces.IGenreController;
 import controllers.interfaces.IMovieController;
 import controllers.interfaces.IUserController;
-import models.CurrentUser;
-import models.Genre;
-import models.Movie;
-import models.User;
+import models.*;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -76,7 +74,7 @@ public class MyApplication {
         try {
             int option = scanner.nextInt();
             switch (option){
-                case 1: getUserByIdMenu(); break;
+                case 1: getUserByName(); break;
                 case 2: createUserMenu(); break;
                 default: return;
             }
@@ -93,9 +91,12 @@ public class MyApplication {
         System.out.println("2. Get movie by name");
         System.out.println(("3. Get movie by genre"));
         System.out.println("4. Get all movies");
+        System.out.println("5. Add movie review");
+        System.out.println("6. Get movie review");
+        System.out.println("7. Logout");
         System.out.println("0. Exit");
         System.out.println();
-        System.out.print("Select an option (1-4): ");
+        System.out.print("Select an option (1-7): ");
         try {
             int option = scanner.nextInt();
             switch (option){
@@ -103,6 +104,9 @@ public class MyApplication {
                 case 2: getMovieByIdMenu(); break;
                 case 3: getMovieByGenreMenu(); break;
                 case 4: getAllMoviesMenu(); break;
+                case 5: addMovieReviewMenu(); break;
+                case 6: getMovieReviewsMenu(); break;
+                case 7: logout(); break;
                 default: return;
             }
         } catch (InputMismatchException e) {
@@ -127,7 +131,7 @@ public class MyApplication {
             int option = scanner.nextInt();
             switch (option){
                 case 1 : getAllUsersMenu(); break;
-                case 2 : getUserByIdMenu(); break;
+                case 2 : getUserById(); break;
                 case 3 : getAllMoviesMenu(); break;
                 case 4 : createMovieMenu(); break;
                 case 5: createGenreMenu(); break;
@@ -170,7 +174,7 @@ public class MyApplication {
         System.out.println("----------------------------------------");
     }
 
-    private void getUserByIdMenu() {
+    private void getUserByName() {
         System.out.println("Please enter your name: ");
         String name = scanner.next();
         System.out.println("Please enter your password: ");
@@ -190,6 +194,13 @@ public class MyApplication {
         String response = user_controller.getAllUsers();
         System.out.println(response);
         System.out.println("----------------------------------------");
+    }
+
+    private void getUserById(){
+        System.out.println("Please enter user id: ");
+        int id = scanner.nextInt();
+        String response = user_controller.getUserById(id);
+        System.out.println(response);
     }
 
     //movies menu
@@ -219,7 +230,7 @@ public class MyApplication {
         String name = scanner.next();
         String genres = genre_controller.getAllGenres();
         System.out.println("Available genres:\n" + genres);
-        System.out.println("Please enter a movie genre: ");
+        System.out.println("Please enter a movie ID of  genre: ");
         int genre = scanner.nextInt();
         System.out.println("Please enter a movie age restriction: ");
         int age_res = scanner.nextInt();
@@ -235,6 +246,7 @@ public class MyApplication {
         User currentUser = CurrentUser.getCurrentUser();
         if (currentUser != null) {
             System.out.println("Logged in as: " + currentUser.getUser_name());
+            System.out.println(currentUser);
         } else {
             System.out.println("No user is logged in.");
         }
@@ -246,5 +258,30 @@ public class MyApplication {
         String response = genre_controller.createGenre(genre_name);
         System.out.println(response);
         System.out.println("----------------------------------------");
+    }
+    private void addMovieReviewMenu() {
+        getAllMoviesMenu();
+        System.out.println("Enter movie ID: ");
+        int movieId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Enter your review: ");
+        String reviewText = scanner.nextLine();
+        String response = movie_controller.addReviewForMovie(movieId,CurrentUser.getCurrentUser().getUser_id(), reviewText);
+        System.out.println(response);
+    }
+
+    private void getMovieReviewsMenu() {
+        getAllMoviesMenu();
+        System.out.println("Enter movie ID to see reviews: ");
+        int id = scanner.nextInt();
+        String reviews = movie_controller.getReviewsByMovieId(id);
+        System.out.println("ID: " + id + " Reviews: ");
+        System.out.println(reviews);
+    }
+
+    private void logout() {
+        CurrentUser.setCurrentUser(null);
+        System.out.println("logged out.");
+        start();
     }
 }

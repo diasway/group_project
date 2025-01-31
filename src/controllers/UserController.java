@@ -21,8 +21,14 @@ public class UserController implements IUserController {
     }
 
     @Override
-    public String getUserById(String name) {
-        User user = repo.getUserById(name);
+    public String getUserByName(String name) {
+        User user = repo.getUserByName(name);
+        return (user == null) ? "User was not found" : user.toString();
+    }
+
+    @Override
+    public String getUserById(int id) {
+        User user = repo.getUserById(id);
         return (user == null) ? "User was not found" : user.toString();
     }
 

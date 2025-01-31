@@ -40,16 +40,21 @@ public class MovieRepository implements IMovieRepository {
         Connection connection = null;
         try{
             connection = db.getConnection();
-            String sql = "SELECT * FROM movies WHERE movie_id = ?";
+            String sql = "SELECT m.movie_id, m.movie_name, m.genre_id, m.age_restriction, m.rating, g.genre_name " +
+                    "FROM movies m " +
+                    "JOIN genres g ON m.genre_id = g.genre_id " +
+                    "WHERE m.movie_id = ?";
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, movie_id);
             ResultSet rs = st.executeQuery();
             if(rs.next()){
-                return new Movie(rs.getInt("movie_id"),
+                Movie movie = new Movie(rs.getInt("movie_id"),
                         rs.getString("movie_name"),
                         rs.getInt("genre_id"),
                         rs.getInt("age_restriction"),
                         rs.getDouble("rating"));
+                movie.setGenre_name(rs.getString("genre_name"));
+                return movie;
             }
         }catch (SQLException e){
             System.out.println("sql error: " + e.getMessage());
@@ -85,7 +90,9 @@ public class MovieRepository implements IMovieRepository {
         Connection connection = null;
         try {
             connection = db.getConnection();
-            String sql = "SELECT * FROM movies";
+            String sql = "SELECT m.movie_id, m.movie_name, m.genre_id, m.age_restriction, m.rating, g.genre_name " +
+                    "FROM movies m " +
+                    "JOIN genres g ON m.genre_id = g.genre_id";
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(sql);
             List<Movie> movies = new ArrayList<>();
@@ -95,6 +102,7 @@ public class MovieRepository implements IMovieRepository {
                         rs.getInt("genre_id"),
                         rs.getInt("age_restriction"),
                         rs.getDouble("rating"));
+                movie.setGenre_name(rs.getString("genre_name"));
                 movies.add(movie);
             }
             return movies;

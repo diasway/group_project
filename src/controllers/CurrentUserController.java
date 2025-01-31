@@ -17,6 +17,6 @@ public class CurrentUserController implements ICurrentUserController {
     public User getUserInfo(String name) {
         User user = currentUserRepo.getUserInfo(name);
         CurrentUser.setCurrentUser(user);
-        return currentUser;
+        return CurrentUser.getCurrentUser();
     }
 }

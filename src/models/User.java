@@ -7,6 +7,7 @@ public class User {
     private boolean user_gender;
     private int genre_id;
     private String password;
+    private String genre_name;
 
     public User() {
     }
@@ -72,6 +73,14 @@ public class User {
         this.password = password;
     }
 
+    public String getGenre_name() {
+        return genre_name;
+    }
+
+    public void setGenre_name(String genre_name) {
+        this.genre_name = genre_name;
+    }
+
     private String gender_casting(){
         if(user_gender) return "Male";
         else return "Female";
@@ -79,6 +88,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "id. " + user_id +  " Username: " + user_name + " age: " + user_age + " gender: " + gender_casting() + " preferred genre: " + genre_id;
+        return String.format("ID: %-4d | Username: %-15s | Age: %-3d | Gender: %-6s | Preferred Genre: %-10s",
+                user_id, user_name, user_age, gender_casting(), genre_name);
     }
 }

@@ -2,15 +2,18 @@ package models;
 
 import repositories.GenreRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Movie {
     private int movie_id;
     private String movie_name;
     private int genre_id;
     private int age_restriction;
     private double rating;
-    private Genre genre;
+    private String genre_name;
+    private List<Review> reviews = new ArrayList<>();
 
-    private GenreRepository genreRepo;
 
     public Movie(String movie_name, int genre_id, int age_restriction, double rating){
         setMovie_name(movie_name);
@@ -55,14 +58,27 @@ public class Movie {
     public void setRating(double rating) {
         this.rating = rating;
     }
-    public String getGenreName(GenreRepository genreRepo) {
-        Genre genre = genreRepo.getGenreById(this.genre_id);
-        return (genre != null) ? genre.getGenre_name() : "Unknown";
+
+    public String getGenre_name() {
+        return genre_name;
+    }
+
+    public void setGenre_name(String genre_name) {
+        this.genre_name = genre_name;
+    }
+
+    public void addReview(Review review) {
+        reviews.add(review);
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
     }
 
     @Override
     public String toString() {
-        return "id. " + movie_id +  " Movie name: " + movie_name + " movie genre: " + genre_id + " age restriction: " + age_restriction + " rating: " + rating;
+        return String.format("Movie ID: %-4d | Name: %-20s | Genre: %-15s | Age Restriction: %-3d | Rating: %-4.1f",
+                movie_id, movie_name, genre_name, age_restriction, rating);
     }
 
 }
