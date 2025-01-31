@@ -1,24 +1,26 @@
 package models;
 
+import repositories.GenreRepository;
+
 public class Movie {
     private int movie_id;
     private String movie_name;
-    private String movie_genre;
+    private int genre_id;
     private int age_restriction;
     private double rating;
-    private String reviews;
+    private Genre genre;
 
+    private GenreRepository genreRepo;
 
-    public Movie(String movie_name, String movie_genre, int age_restriction, double rating, String reviews){
+    public Movie(String movie_name, int genre_id, int age_restriction, double rating){
         setMovie_name(movie_name);
-        setMovie_genre(movie_genre);
+        setGenre_id(genre_id);
         setAge_restriction(age_restriction);
         setRating(rating);
-        setReviews(reviews);
     }
 
-    public Movie(int movie_id, String movie_name, String movie_genre, int age_restriction, double rating, String reviews){
-        this(movie_name, movie_genre, age_restriction,rating,reviews);
+    public Movie(int movie_id, String movie_name, int genre_id, int age_restriction, double rating){
+        this(movie_name, genre_id, age_restriction,rating);
         this.movie_id = movie_id;
     }
 
@@ -30,12 +32,12 @@ public class Movie {
         this.movie_name = movie_name;
     }
 
-    public String getMovie_genre() {
-        return movie_genre;
+    public int getGenre_id() {
+        return genre_id;
     }
 
-    public void setMovie_genre(String movie_genre) {
-        this.movie_genre = movie_genre;
+    public void setGenre_id(int genre_id) {
+        this.genre_id = genre_id;
     }
 
     public int getAge_restriction() {
@@ -53,18 +55,14 @@ public class Movie {
     public void setRating(double rating) {
         this.rating = rating;
     }
-
-    public String getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(String reviews) {
-        this.reviews = reviews;
+    public String getGenreName(GenreRepository genreRepo) {
+        Genre genre = genreRepo.getGenreById(this.genre_id);
+        return (genre != null) ? genre.getGenre_name() : "Unknown";
     }
 
     @Override
     public String toString() {
-        return "id. " + movie_id +  " Movie name: " + movie_name + " movie genre: " + movie_genre + " age restriction: " + age_restriction + " rating: " + rating;
+        return "id. " + movie_id +  " Movie name: " + movie_name + " movie genre: " + genre_id + " age restriction: " + age_restriction + " rating: " + rating;
     }
 
 }

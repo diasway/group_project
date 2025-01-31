@@ -17,7 +17,7 @@ public class GenreController implements IGenreController {
 
     @Override
     public String createGenre(String genreName) {
-        Genre genre = new Genre(0, genreName);
+        Genre genre = new Genre(genreName);
         boolean created = repo.createGenre(genre);
         return created ? "Genre was successfully created." : "Genre creation failed.";
     }

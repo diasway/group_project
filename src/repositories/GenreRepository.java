@@ -20,7 +20,7 @@ public class GenreRepository implements IGenreRepository {
         try (Connection connection = db.getConnection()) {
             String sql = "INSERT INTO genres(genre_name) VALUES (?)";
             PreparedStatement st = connection.prepareStatement(sql);
-            st.setString(1, genre.getGenreName());
+            st.setString(1, genre.getGenre_name());
             st.execute();
             return true;
         } catch (SQLException e) {
@@ -32,12 +32,12 @@ public class GenreRepository implements IGenreRepository {
     @Override
     public Genre getGenreById(int id) {
         try (Connection connection = db.getConnection()) {
-            String sql = "SELECT * FROM genres WHERE id = ?";
+            String sql = "SELECT * FROM genres WHERE genre_id = ?";
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
-                return new Genre(rs.getInt("id"), rs.getString("genre_name"));
+                return new Genre(rs.getInt("genre_id"), rs.getString("genre_name"));
             }
         } catch (SQLException e) {
             System.out.println("SQL Error: " + e.getMessage());
@@ -53,7 +53,7 @@ public class GenreRepository implements IGenreRepository {
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
-                genres.add(new Genre(rs.getInt("id"), rs.getString("genre_name")));
+                genres.add(new Genre(rs.getInt("genre_id"), rs.getString("genre_name")));
             }
         } catch (SQLException e) {
             System.out.println("SQL Error: " + e.getMessage());
