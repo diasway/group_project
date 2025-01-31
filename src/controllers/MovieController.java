@@ -26,6 +26,13 @@ public class MovieController implements IMovieController {
     }
 
     @Override
+    public String getMovieByGenre(int movie_genre) {
+        Movie movie = repo.getMovieByGenre(movie_genre);
+        return (movie == null) ? "Movie was not found" : movie.toString();
+    }
+
+
+    @Override
     public String getAllMovies() {
         List<Movie> movies = repo.getAllMovies();
         StringBuilder response = new StringBuilder();

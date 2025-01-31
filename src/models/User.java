@@ -5,22 +5,22 @@ public class User {
     private String user_name;
     private int user_age;
     private boolean user_gender;
-    private String preferred_genre;
+    private int genre_id;
     private String password;
 
     public User() {
     }
 
-    public User(String user_name, int user_age, boolean user_gender, String preferred_genre, String password) {
+    public User(String user_name, int user_age, boolean user_gender, int genre_id, String password) {
         setUser_name(user_name);
         setUser_age(user_age);
         setUser_gender(user_gender);
-        setPreferred_genre(preferred_genre);
+        setGenre_id(genre_id);
         setPassword(password);
     }
 
-    public User(int user_id, String user_name, int user_age, boolean user_gender, String preferred_genre, String password) {
-        this(user_name, user_age, user_gender, preferred_genre, password);
+    public User(int user_id, String user_name, int user_age, boolean user_gender, int genre_id, String password) {
+        this(user_name, user_age, user_gender, genre_id, password);
         setUser_id(user_id);
     }
 
@@ -56,12 +56,12 @@ public class User {
         this.user_gender = user_gender;
     }
 
-    public String getPreferred_genre() {
-        return preferred_genre;
+    public int getGenre_id() {
+        return genre_id;
     }
 
-    public void setPreferred_genre(String preferred_genre) {
-        this.preferred_genre = preferred_genre;
+    public void setGenre_id(int genre_id) {
+        this.genre_id = genre_id;
     }
 
     public String getPassword() {
@@ -79,6 +79,6 @@ public class User {
 
     @Override
     public String toString() {
-        return "id. " + user_id +  " Username: " + user_name + " age: " + user_age + " gender: " + gender_casting() + " preferred genre: " + preferred_genre;
+        return "id. " + user_id +  " Username: " + user_name + " age: " + user_age + " gender: " + gender_casting() + " preferred genre: " + genre_id;
     }
 }

@@ -13,9 +13,9 @@ public class UserController implements IUserController {
     }
 
     @Override
-    public String createUser(String name, int age, String gender, String preffered_genre, String password) {
+    public String createUser(String name, int age, String gender, int genre_id, String password) {
         boolean male = gender.equalsIgnoreCase("male");
-        User user = new User(name, age, male, preffered_genre, password);
+        User user = new User(name, age, male, genre_id, password);
         boolean created = repo.createUser(user);
         return (created) ? "User was created" : "User creation was failed";
     }
@@ -27,8 +27,8 @@ public class UserController implements IUserController {
     }
 
     public boolean getUserPassword(String name, String password){
-        boolean pasword_check = repo.getUserPassword(name, password);
-        return pasword_check;
+        boolean password_check = repo.getUserPassword(name, password);
+        return password_check;
     }
 
     @Override
