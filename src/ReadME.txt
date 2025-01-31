@@ -70,6 +70,7 @@ Methods:
 Getters and setters for each field, allowing access and modification of the attributes.
 toString method, which returns a string representation of the Review object.
 
+
 CLASS CurrentUser:
 The Current User class is a singleton utility class designed to store and manage the currently logged-in user within an application.
 Static Field current User: Holds the reference to the logged-in user.
