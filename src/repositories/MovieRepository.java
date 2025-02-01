@@ -92,7 +92,7 @@ public class MovieRepository implements IMovieRepository {
             connection = db.getConnection();
             String sql = "SELECT m.movie_id, m.movie_name, m.genre_id, m.age_restriction, m.rating, g.genre_name " +
                     "FROM movies m " +
-                    "JOIN genres g ON m.genre_id = g.genre_id";
+                    "JOIN genres g ON m.genre_id = g.genre_id ORDER BY movie_id ASC ";
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(sql);
             List<Movie> movies = new ArrayList<>();
@@ -110,5 +110,20 @@ public class MovieRepository implements IMovieRepository {
             System.out.println("sql error: " + e.getMessage());
         }
         return null;
+    }
+
+    @Override
+    public boolean deleteMovie(int movieId) {
+        Connection connection = null;
+        try {
+            connection = db.getConnection();
+            String sql = "DELETE FROM movies WHERE movie_id = ?";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, movieId);
+            return true;
+        } catch (SQLException e) {
+            System.out.println("SQL error: " + e.getMessage());
+        }
+        return false;
     }
 }

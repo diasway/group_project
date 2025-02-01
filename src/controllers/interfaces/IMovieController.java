@@ -7,6 +7,9 @@ public interface IMovieController {
     String getMovieById(int genre_id);
     String getMovieByGenre(int movie_genre);
     String getAllMovies();
+    String deleteMovie(int movieId);
 
     String addReviewForMovie(int movieId, int userId, String reviewText);
-    String getReviewsByMovieId(int movieId);}
+    String getReviewsByMovieId(int movieId);
+}
+

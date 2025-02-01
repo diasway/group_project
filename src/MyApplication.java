@@ -88,7 +88,7 @@ public class MyApplication {
     }
     private void UserMenu(){
         System.out.println("1. Profile");
-        System.out.println("2. Get movie by name");
+        System.out.println("2. Get movie by ID");
         System.out.println(("3. Get movie by genre"));
         System.out.println("4. Get all movies");
         System.out.println("5. Add movie review");
@@ -121,20 +121,24 @@ public class MyApplication {
         System.out.println("Welcome to movie centre");
         System.out.println("Select the option:");
         System.out.println("1. Get all users");
-        System.out.println("2. Get user by id");
+        System.out.println("2. Get user by ID");
         System.out.println("3. Get all movies");
-        System.out.println("4. Upload a new movie");
-        System.out.println("5. Upload a new genre");
+        System.out.println("4. Get movie by ID");
+        System.out.println("5. Upload a new movie");
+        System.out.println("6. Upload a new genre");
+        System.out.println("7. Delete movie by ID");
         System.out.println("0. Exit");
-        System.out.println("Enter option: (1-5): ");
+        System.out.println("Enter option: (1-6): ");
         try {
             int option = scanner.nextInt();
             switch (option){
                 case 1 : getAllUsersMenu(); break;
                 case 2 : getUserById(); break;
                 case 3 : getAllMoviesMenu(); break;
-                case 4 : createMovieMenu(); break;
-                case 5: createGenreMenu(); break;
+                case 4 : getMovieByIdMenu(); break;
+                case 5: createMovieMenu(); break;
+                case 6: createGenreMenu(); break;
+                case 7: deleteMovieMenu(); break;
                 default: return;
             }
         }
@@ -246,7 +250,6 @@ public class MyApplication {
         User currentUser = CurrentUser.getCurrentUser();
         if (currentUser != null) {
             System.out.println("Logged in as: " + currentUser.getUser_name());
-            System.out.println(currentUser);
         } else {
             System.out.println("No user is logged in.");
         }
@@ -257,6 +260,13 @@ public class MyApplication {
         Genre genre = new Genre(genre_name);
         String response = genre_controller.createGenre(genre_name);
         System.out.println(response);
+        System.out.println("----------------------------------------");
+    }
+
+    private void deleteMovieMenu(){
+        System.out.println("Enter the ID of movie you want delete: ");
+        int id = scanner.nextInt();
+        String response = movie_controller.deleteMovie(id);
         System.out.println("----------------------------------------");
     }
     private void addMovieReviewMenu() {
