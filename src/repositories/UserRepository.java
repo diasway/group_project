@@ -66,6 +66,7 @@ public class UserRepository implements IUserRepository {
         }
         return null;
     }
+
     @Override
     public User getUserById(int id) {
         Connection connection = null;
@@ -95,7 +96,7 @@ public class UserRepository implements IUserRepository {
         return null;
     }
 
-    public boolean getUserPassword(String name, String password){
+    public boolean getUserPassword(String name, String password) {
         Connection connection = null;
         try {
             connection = db.getConnection();
@@ -103,11 +104,42 @@ public class UserRepository implements IUserRepository {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, name);
             ResultSet rs = st.executeQuery();
-            if(rs.next() && rs.getString("password").equals(password)){
+            if (rs.next() && rs.getString("password").equals(password)) {
                 return true;
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             System.out.println("sql error:" + e.getMessage());
+        }
+        return false;
+    }
+
+    @Override
+    public boolean updateUser(User user) {
+        try (Connection connection = db.getConnection()) {
+            String sql = "UPDATE users SET user_name = ?, user_age = ?, user_gender = ?, genre_id = ?, password = ? WHERE user_id = ?";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, user.getUser_name());
+            st.setInt(2, user.getUser_age());
+            st.setBoolean(3, user.getUser_gender());
+            st.setInt(4, user.getGenre_id());
+            st.setString(5, user.getPassword());
+            st.setInt(6, user.getUser_id());
+            return st.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println("sql error: " + e.getMessage());
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteUser(int id) {
+        try (Connection connection = db.getConnection()) {
+            String sql = "DELETE FROM users WHERE user_id = ?";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, id);
+            return st.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println("sql error: " + e.getMessage());
         }
         return false;
     }

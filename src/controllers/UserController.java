@@ -38,6 +38,23 @@ public class UserController implements IUserController {
     }
 
     @Override
+    public String updateUser(int id, String name, int age, String gender, int preferred_genre, String password) {
+        boolean male = gender.equalsIgnoreCase("male");
+        User user = repo.getUserById(id);
+        if (user == null) {
+            return "User not found";
+        }
+        boolean updated = repo.updateUser(new User(id, name, age, male, preferred_genre, password));
+        return (updated) ? "User was updated" : "User update failed";
+    }
+
+    @Override
+    public String deleteUser(int id) {
+        boolean deleted = repo.deleteUser(id);
+        return (deleted) ? "User was deleted" : "User deletion failed";
+    }
+
+    @Override
     public String getAllUsers() {
         List<User> users = repo.getAllUsers();
         StringBuilder response = new StringBuilder();

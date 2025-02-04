@@ -1,7 +1,5 @@
 package repositories.interfaces;
-
 import models.User;
-
 import java.util.List;
 
 public interface IUserRepository {
@@ -10,4 +8,6 @@ public interface IUserRepository {
     User getUserById(int id);
     List<User> getAllUsers();
     boolean getUserPassword(String name, String password);
+    boolean updateUser(User user);
+    boolean deleteUser(int id);
 }
