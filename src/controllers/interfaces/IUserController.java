@@ -8,4 +8,5 @@ public interface IUserController {
     boolean getUserPassword(String name, String password);
     String updateUser(int id, String name, int age, String gender, int preferred_genre, String password);
     String deleteUser(int id);
+    String getUsersOlderThan18();
 }

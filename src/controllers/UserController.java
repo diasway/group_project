@@ -4,6 +4,7 @@ import controllers.interfaces.IUserController;
 import models.User;
 import repositories.interfaces.IUserRepository;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserController implements IUserController {
     private final IUserRepository repo;
@@ -55,12 +56,19 @@ public class UserController implements IUserController {
     }
 
     @Override
+    public String getUsersOlderThan18() {
+        return repo.getAllUsers().stream()
+                .filter(user -> user.getUser_age() > 18)
+                .map(User::toString)
+                .collect(Collectors.joining("\n", "", ""));
+    }
+
+    @Override
     public String getAllUsers() {
         List<User> users = repo.getAllUsers();
-        StringBuilder response = new StringBuilder();
-        for (User user : users) {
-            response.append(user.toString()).append("\n");
-        }
-        return response.toString();
+        return users.stream()
+                .map(User::toString)  // Using method reference instead of lambda
+                .reduce((a, b) -> a + "\n" + b)
+                .orElse("No users found");
     }
 }

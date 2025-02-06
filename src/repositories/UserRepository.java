@@ -7,6 +7,7 @@ import repositories.interfaces.IUserRepository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserRepository implements IUserRepository {
     private final IDB db;
@@ -143,6 +144,29 @@ public class UserRepository implements IUserRepository {
         }
         return false;
     }
+
+    @Override
+    public List<User> getUsersOlderThan18() {
+            List<User> users = new ArrayList<>();
+            try (Connection connection = db.getConnection()) {
+                String sql = "SELECT * FROM users WHERE user_age > 18";
+                PreparedStatement st = connection.prepareStatement(sql);
+                ResultSet rs = st.executeQuery();
+                while (rs.next()) {
+                    User user = new User(
+                            rs.getInt("user_id"),
+                            rs.getString("user_name"),
+                            rs.getInt("user_age"),
+                            rs.getBoolean("user_gender"),
+                            rs.getInt("genre_id"),
+                            rs.getString("password"));
+                    users.add(user);
+                }
+            } catch (SQLException e) {
+                System.out.println("SQL error: " + e.getMessage());
+            }
+            return users;
+        }
 
     @Override
     public List<User> getAllUsers() {

@@ -10,4 +10,6 @@ public interface IUserRepository {
     boolean getUserPassword(String name, String password);
     boolean updateUser(User user);
     boolean deleteUser(int id);
+
+    List<User> getUsersOlderThan18();
 }
