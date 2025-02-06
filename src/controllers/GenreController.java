@@ -37,4 +37,17 @@ public class GenreController implements IGenreController {
         }
         return response.toString();
     }
+
+    @Override
+    public String updateGenre(int id, String newGenreName) {
+        Genre genre = new Genre(id, newGenreName);
+        boolean updated = repo.updateGenre(genre);
+        return updated ? "Genre was successfully updated." : "Genre update failed.";
+    }
+
+    @Override
+    public String deleteGenre(int id) {
+        boolean deleted = repo.deleteGenre(id);
+        return deleted ? "Genre was successfully deleted." : "Genre deletion failed.";
+    }
 }

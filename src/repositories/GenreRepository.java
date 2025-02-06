@@ -60,4 +60,33 @@ public class GenreRepository implements IGenreRepository {
         }
         return genres;
     }
+
+    @Override
+    public boolean updateGenre(Genre genre) {
+        try (Connection connection = db.getConnection()) {
+            String sql = "UPDATE genres SET genre_name = ? WHERE genre_id = ?";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, genre.getGenre_name());
+            st.setInt(2, genre.getGenre_id());
+            int affectedRows = st.executeUpdate();
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            System.out.println("SQL Error: " + e.getMessage());
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteGenre(int id) {
+        try (Connection connection = db.getConnection()) {
+            String sql = "DELETE FROM genres WHERE genre_id = ?";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, id);
+            int affectedRows = st.executeUpdate();
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            System.out.println("SQL Error: " + e.getMessage());
+        }
+        return false;
+    }
 }

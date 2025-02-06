@@ -19,4 +19,16 @@ public class CurrentUserController implements ICurrentUserController {
         CurrentUser.setCurrentUser(user);
         return CurrentUser.getCurrentUser();
     }
+
+    @Override
+    public String updateUser(String name, User updatedUser) {
+        boolean updated = currentUserRepo.updateUser(updatedUser);
+        return updated ? "User was successfully updated." : "User update failed.";
+    }
+
+    @Override
+    public String deleteUser(String name) {
+        boolean deleted = currentUserRepo.deleteUser(name);
+        return deleted ? "User was successfully deleted." : "User deletion failed.";
+    }
 }
