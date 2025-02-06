@@ -8,4 +8,6 @@ public interface IReviewRepository {
     boolean createReview(Review review);
     List<Review> getReviewsByMovieId(int movieId);
     List<Review> getReviewsByUserId(int userId);
+    boolean updateReview(Review review);
+    boolean deleteReview(int reviewId);
 }

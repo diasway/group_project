@@ -93,4 +93,33 @@ public class ReviewRepository implements IReviewRepository {
         }
         return null;
     }
+
+    @Override
+    public boolean updateReview(Review review) {
+        try (Connection connection = db.getConnection()) {
+            String sql = "UPDATE movie_reviews SET review_text = ? WHERE review_id = ?";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, review.getReviewText());
+            st.setInt(2, review.getId());
+            int affectedRows = st.executeUpdate();
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            System.out.println("SQL error: " + e.getMessage());
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteReview(int reviewId) {
+        try (Connection connection = db.getConnection()) {
+            String sql = "DELETE FROM movie_reviews WHERE review_id = ?";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, reviewId);
+            int affectedRows = st.executeUpdate();
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            System.out.println("SQL error: " + e.getMessage());
+        }
+        return false;
+    }
 }

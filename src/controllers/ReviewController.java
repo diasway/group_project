@@ -39,4 +39,20 @@ public class ReviewController implements IReviewController {
         }
         return response.toString();
     }
+
+    @Override
+    public String updateReview(int reviewId, String newReviewText) {
+        if (newReviewText == null || newReviewText.trim().isEmpty()) {
+            return "Review text cannot be empty";
+        }
+        Review review = new Review(reviewId, 0, 0, newReviewText);
+        boolean updated = repo.updateReview(review);
+        return updated ? "Review was updated" : "Review update failed";
+    }
+
+    @Override
+    public String deleteReview(int reviewId) {
+        boolean deleted = repo.deleteReview(reviewId);
+        return deleted ? "Review was deleted" : "Review deletion failed";
+    }
 }
