@@ -10,4 +10,5 @@ public interface IMovieRepository {
     Movie getMovieByGenre(int movie_genre);
     List<Movie> getAllMovies();
     boolean deleteMovie(int movieId);
+    boolean updateMovie(Movie movie);
 }

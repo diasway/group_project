@@ -120,9 +120,28 @@ public class MovieRepository implements IMovieRepository {
             String sql = "DELETE FROM movies WHERE movie_id = ?";
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, movieId);
-            return true;
+            int affectedRows = st.executeUpdate();
+            return affectedRows > 0;
         } catch (SQLException e) {
             System.out.println("SQL error: " + e.getMessage());
+        }
+        return false;
+    }
+
+    @Override
+    public boolean updateMovie(Movie movie) {
+        try (Connection connection = db.getConnection()) {
+            String sql = "UPDATE movies SET movie_name = ?, genre_id = ?, age_restriction = ?, rating = ? WHERE movie_id = ?";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, movie.getMovie_name());
+            st.setInt(2, movie.getGenre_id());
+            st.setInt(3, movie.getAge_restriction());
+            st.setDouble(4, movie.getRating());
+            st.setInt(5, movie.getMovieId());
+            int affectedRows = st.executeUpdate();
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            System.out.println("SQL Error: " + e.getMessage());
         }
         return false;
     }

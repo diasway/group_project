@@ -15,16 +15,20 @@ public class Movie {
     private List<Review> reviews = new ArrayList<>();
 
 
-    public Movie(String movie_name, int genre_id, int age_restriction, double rating){
+    public Movie(String movie_name, int genre_id, int age_restriction, double rating) {
         setMovie_name(movie_name);
         setGenre_id(genre_id);
         setAge_restriction(age_restriction);
         setRating(rating);
     }
 
-    public Movie(int movie_id, String movie_name, int genre_id, int age_restriction, double rating){
-        this(movie_name, genre_id, age_restriction,rating);
+    public Movie(int movie_id, String movie_name, int genre_id, int age_restriction, double rating) {
+        this(movie_name, genre_id, age_restriction, rating);
         this.movie_id = movie_id;
+    }
+
+    public int getMovieId() {
+        return movie_id;
     }
 
     public String getMovie_name() {
@@ -80,5 +84,4 @@ public class Movie {
         return String.format("Movie ID: %-4d | Name: %-20s | Genre: %-15s | Age Restriction: %-3d | Rating: %-4.1f",
                 movie_id, movie_name, genre_name, age_restriction, rating);
     }
-
 }

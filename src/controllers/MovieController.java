@@ -67,6 +67,12 @@ public class MovieController implements IMovieController {
     @Override
     public String deleteMovie(int movieId) {
         boolean deleted = repo.deleteMovie(movieId);
-        return deleted ? "Movie has been deleted" : "Error movie deleteing";
+        return deleted ? "Movie has been deleted" : "Error deleting movie";
+    }
+
+    @Override
+    public String updateMovie(int movieId, Movie updatedMovie) {
+        boolean updated = repo.updateMovie(updatedMovie);
+        return updated ? "Movie has been updated" : "Error updating movie";
     }
 }
