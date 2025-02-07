@@ -15,10 +15,14 @@ public class UserController implements IUserController {
 
     @Override
     public String createUser(String name, int age, String gender, int genre_id, String password) {
-        boolean male = gender.equalsIgnoreCase("male");
-        User user = new User(name, age, male, genre_id, password);
-        boolean created = repo.createUser(user);
-        return (created) ? "User was created" : "User creation was failed";
+        try {
+            boolean male = gender.equalsIgnoreCase("male");
+            User user = new User(name, age, male, genre_id, password);
+            boolean created = repo.createUser(user);
+            return created ? "User was created" : "User creation failed";
+        } catch (IllegalArgumentException e) {
+            return "Error: " + e.getMessage();  // Сatch the validation error and show it to the user
+        }
     }
 
     @Override
@@ -57,17 +61,17 @@ public class UserController implements IUserController {
 
     @Override
     public String getUsersOlderThan18() {
-            List<User> users = repo.getUsersOlderThan18();
-            if (users.isEmpty()) {
-                return "No users older than 18 found.";
-            }
-            return users.stream()
-                    .map(user -> user.getUser_name() + " - " + user.getUser_age() + " years old")
-                    .collect(Collectors.joining("\n"));
+        List<User> users = repo.getUsersOlderThan18();
+        if (users.isEmpty()) {
+            return "No users older than 18 found.";
         }
+        return users.stream()
+                .map(user -> user.getUser_name() + " - " + user.getUser_age() + " years old")
+                .collect(Collectors.joining("\n"));
+    }
 
 
-        @Override
+    @Override
     public String getAllUsers() {
         List<User> users = repo.getAllUsers();
         return users.stream()
