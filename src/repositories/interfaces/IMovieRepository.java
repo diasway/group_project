@@ -11,4 +11,6 @@ public interface IMovieRepository {
     List<Movie> getAllMovies();
     boolean deleteMovie(int movieId);
     boolean updateMovie(Movie movie);
+
+    void updateMovieRating(int movieId);
 }

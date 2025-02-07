@@ -10,9 +10,11 @@ import java.util.List;
 
 public class ReviewRepository implements IReviewRepository {
     private final IDB db;
+    private final MovieRepository movieRepository;
 
     public ReviewRepository(IDB db) {
         this.db = db;
+        this.movieRepository = new MovieRepository(db);
     }
 
     @Override
@@ -29,7 +31,11 @@ public class ReviewRepository implements IReviewRepository {
 
             st.execute();
 
-            return true;
+            int affectedRows = st.executeUpdate();
+            if (affectedRows > 0) {
+                movieRepository.updateMovieRating(review.getMovieId());
+                return true;
+            }
         } catch (SQLException e) {
             System.out.println("SQL error: " + e.getMessage());
         }
@@ -102,7 +108,10 @@ public class ReviewRepository implements IReviewRepository {
             st.setString(1, review.getReviewText());
             st.setInt(2, review.getId());
             int affectedRows = st.executeUpdate();
-            return affectedRows > 0;
+            if (affectedRows > 0) {
+                movieRepository.updateMovieRating(review.getMovieId());
+                return true;
+            }
         } catch (SQLException e) {
             System.out.println("SQL error: " + e.getMessage());
         }

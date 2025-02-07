@@ -127,6 +127,7 @@ public class MyApplication {
         System.out.println("5. Upload a new movie");
         System.out.println("6. Upload a new genre");
         System.out.println("7. Delete movie by ID");
+        System.out.println("8. Get users who older than 18");
         System.out.println("0. Exit");
         System.out.println("Enter option: (1-6): ");
         try {
@@ -139,6 +140,7 @@ public class MyApplication {
                 case 5: createMovieMenu(); break;
                 case 6: createGenreMenu(); break;
                 case 7: deleteMovieMenu(); break;
+                case 8: getAllUserOlder(); break;
                 default: return;
             }
         }
@@ -293,5 +295,9 @@ public class MyApplication {
         CurrentUser.setCurrentUser(null);
         System.out.println("logged out.");
         start();
+    }
+    private void getAllUserOlder(){
+        String response = user_controller.getUsersOlderThan18();
+        System.out.println(response);
     }
 }

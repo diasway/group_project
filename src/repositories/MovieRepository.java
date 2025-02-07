@@ -145,4 +145,16 @@ public class MovieRepository implements IMovieRepository {
         }
         return false;
     }
+    @Override
+    public void updateMovieRating(int movieId) {
+        try (Connection connection = db.getConnection()) {
+            String sql = "UPDATE movies SET rating = (SELECT AVG(rating) FROM movie_reviews WHERE movie_id = ?) WHERE movie_id = ?";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, movieId);
+            st.setInt(2, movieId);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("SQL Error: " + e.getMessage());
+        }
+    }
 }
