@@ -57,13 +57,17 @@ public class UserController implements IUserController {
 
     @Override
     public String getUsersOlderThan18() {
-        return repo.getAllUsers().stream()
-                .filter(user -> user.getUser_age() > 18)
-                .map(User::toString)
-                .collect(Collectors.joining("\n", "", ""));
-    }
+            List<User> users = repo.getUsersOlderThan18();
+            if (users.isEmpty()) {
+                return "No users older than 18 found.";
+            }
+            return users.stream()
+                    .map(user -> user.getUser_name() + " - " + user.getUser_age() + " years old")
+                    .collect(Collectors.joining("\n"));
+        }
 
-    @Override
+
+        @Override
     public String getAllUsers() {
         List<User> users = repo.getAllUsers();
         return users.stream()

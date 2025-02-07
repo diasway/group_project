@@ -149,18 +149,19 @@ public class UserRepository implements IUserRepository {
     public List<User> getUsersOlderThan18() {
             List<User> users = new ArrayList<>();
             try (Connection connection = db.getConnection()) {
-                String sql = "SELECT * FROM users WHERE user_age > 18";
+                String sql = "SELECT * FROM users";
                 PreparedStatement st = connection.prepareStatement(sql);
                 ResultSet rs = st.executeQuery();
                 while (rs.next()) {
-                    User user = new User(
-                            rs.getInt("user_id"),
-                            rs.getString("user_name"),
-                            rs.getInt("user_age"),
-                            rs.getBoolean("user_gender"),
-                            rs.getInt("genre_id"),
-                            rs.getString("password"));
-                    users.add(user);
+                    if (rs.getInt("user_age") > 18) {
+                        users.add(new User(
+                                rs.getInt("user_id"),
+                                rs.getString("user_name"),
+                                rs.getInt("user_age"),
+                                rs.getBoolean("user_gender"),
+                                rs.getInt("genre_id"),
+                                rs.getString("password")));
+                    }
                 }
             } catch (SQLException e) {
                 System.out.println("SQL error: " + e.getMessage());
