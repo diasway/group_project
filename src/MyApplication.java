@@ -1,25 +1,26 @@
-import controllers.interfaces.ICurrentUserController;
-import controllers.interfaces.IGenreController;
-import controllers.interfaces.IMovieController;
-import controllers.interfaces.IUserController;
+import controllers.interfaces.*;
 import models.*;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import static models.CurrentUser.getCurrentUser;
+
 public class MyApplication {
     private final IUserController user_controller;
     private final IMovieController movie_controller;
     private final IGenreController genre_controller;
+    private final IReviewController review_controller;
     private final ICurrentUserController currentUser_controller;
     private final Scanner scanner = new Scanner(System.in);
     private User user;
 
-    public MyApplication(IUserController user_controller, IMovieController movie_controller, IGenreController genre_controller, ICurrentUserController currentUser_controller) {
+    public MyApplication(IUserController user_controller, IMovieController movie_controller, IGenreController genre_controller, IReviewController reviewController, ICurrentUserController currentUser_controller) {
         this.user_controller = user_controller;
         this.movie_controller = movie_controller;
         this.genre_controller = genre_controller;
+        this.review_controller = reviewController;
         this.currentUser_controller = currentUser_controller;
     }
 
@@ -60,7 +61,6 @@ public class MyApplication {
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
-                System.out.println("----------------------------------------");
             }
             }
 
@@ -84,7 +84,6 @@ public class MyApplication {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        System.out.println("----------------------------------------");
     }
     private void UserMenu(){
         System.out.println("1. Profile");
@@ -115,7 +114,6 @@ public class MyApplication {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        System.out.println("----------------------------------------");
     }
     private void MovieMenu(){
         System.out.println("Welcome to movie centre");
@@ -151,7 +149,6 @@ public class MyApplication {
         catch (Exception e){
             System.out.println(e.getMessage());
         }
-        System.out.println("----------------------------------------");
     }
 
     //user menus
@@ -167,6 +164,7 @@ public class MyApplication {
         System.out.println("Please enter preferred genre: ");
         int genre_id = scanner.nextInt();
         System.out.println("Please enter password: ");
+        System.out.println("Password must be between 4 and 6 digits only");
         String password = scanner.next();
 
         String response = user_controller.createUser(name, age, gender, genre_id, password);
@@ -188,7 +186,7 @@ public class MyApplication {
 
         if (user_controller.getUserPassword(name, password)) {
             currentUser_controller.getUserInfo(name);
-            System.out.println("Welcome, " + CurrentUser.getCurrentUser().getUser_name());
+            System.out.println("Welcome, " + getCurrentUser().getUser_name());
             UserMenu();
         } else {
             System.out.println("Incorrect password");
@@ -207,6 +205,7 @@ public class MyApplication {
         int id = scanner.nextInt();
         String response = user_controller.getUserById(id);
         System.out.println(response);
+        System.out.println("----------------------------------------");
     }
 
     //movies menu
@@ -230,6 +229,7 @@ public class MyApplication {
         int id = scanner.nextInt();
         String response = movie_controller.getMovieByGenre(id);
         System.out.println(response);
+        System.out.println("----------------------------------------");
     }
     private void createMovieMenu(){
         System.out.println("Please enter a movie name: ");
@@ -249,12 +249,13 @@ public class MyApplication {
         System.out.println("----------------------------------------");
     }
     private void getCurrentUserInfo(){
-        User currentUser = CurrentUser.getCurrentUser();
+        User currentUser = getCurrentUser();
         if (currentUser != null) {
             System.out.println("Logged in as: " + currentUser.getUser_name());
         } else {
             System.out.println("No user is logged in.");
         }
+        System.out.println("----------------------------------------");
     }
     private void createGenreMenu(){
         System.out.println("Please enter a genre name: ");
@@ -276,28 +277,34 @@ public class MyApplication {
         System.out.println("Enter movie ID: ");
         int movieId = scanner.nextInt();
         scanner.nextLine();
+        System.out.println("Please rate movie from 0-5");
+        double rating = scanner.nextDouble();
         System.out.println("Enter your review: ");
         String reviewText = scanner.nextLine();
-        String response = movie_controller.addReviewForMovie(movieId,CurrentUser.getCurrentUser().getUser_id(), reviewText);
+        String response = review_controller.addReviewForMovie(movieId,CurrentUser.getCurrentUser().getUser_id(), reviewText, rating);
         System.out.println(response);
+        System.out.println("----------------------------------------");
     }
 
     private void getMovieReviewsMenu() {
         getAllMoviesMenu();
         System.out.println("Enter movie ID to see reviews: ");
         int id = scanner.nextInt();
-        String reviews = movie_controller.getReviewsByMovieId(id);
+        String reviews = review_controller.getReviewsByMovieId(id);
         System.out.println("ID: " + id + " Reviews: ");
         System.out.println(reviews);
+        System.out.println("----------------------------------------");
     }
 
     private void logout() {
         CurrentUser.setCurrentUser(null);
         System.out.println("logged out.");
         start();
+        System.out.println("----------------------------------------");
     }
     private void getAllUserOlder(){
         String response = user_controller.getUsersOlderThan18();
         System.out.println(response);
+        System.out.println("----------------------------------------");
     }
 }

@@ -9,7 +9,5 @@ public interface IMovieController {
     String getAllMovies();
     String deleteMovie(int movieId);
     String updateMovie(int movieId, Movie updatedMovie);
-    String addReviewForMovie(int movieId, int userId, String reviewText);
-    String getReviewsByMovieId(int movieId);
 }
 

@@ -17,9 +17,9 @@ public class Main {
         IReviewRepository review_repo = new ReviewRepository(db);
         IReviewController review_controller = new ReviewController(review_repo);
         IMovieRepository movie_repo = new MovieRepository(db);
-        IMovieController movie_controller = new MovieController(movie_repo, review_repo);
+        IMovieController movie_controller = new MovieController(movie_repo);
 
-        MyApplication app = new MyApplication(user_controller,movie_controller,genre_controller,currentUser_controller);
+        MyApplication app = new MyApplication(user_controller,movie_controller,genre_controller,review_controller, currentUser_controller);
         app.start();
         db.close();
     }

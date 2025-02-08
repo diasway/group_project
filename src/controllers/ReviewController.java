@@ -1,6 +1,7 @@
 package controllers;
 
 import controllers.interfaces.IReviewController;
+import models.CurrentUser;
 import models.Review;
 import repositories.interfaces.IReviewRepository;
 
@@ -14,10 +15,10 @@ public class ReviewController implements IReviewController {
     }
 
     @Override
-    public String createReview(int movieId, int userId, String reviewText) {
-        Review review = new Review(movieId, userId, reviewText);
+    public String addReviewForMovie(int movieId, int userId, String reviewText, double rating) {
+        Review review = new Review(movieId, CurrentUser.getCurrentUser().getUser_id(), reviewText, rating);
         boolean created = repo.createReview(review);
-        return (created) ? "Review was created" : "Review creation failed";
+        return created ? "Review has been added." : "Error adding review.";
     }
 
     @Override
@@ -41,11 +42,11 @@ public class ReviewController implements IReviewController {
     }
 
     @Override
-    public String updateReview(int reviewId, String newReviewText) {
+    public String updateReview(int reviewId, String newReviewText, double rating) {
         if (newReviewText == null || newReviewText.trim().isEmpty()) {
             return "Review text cannot be empty";
         }
-        Review review = new Review(reviewId, 0, 0, newReviewText);
+        Review review = new Review(reviewId, 0, 0, newReviewText, rating);
         boolean updated = repo.updateReview(review);
         return updated ? "Review was updated" : "Review update failed";
     }

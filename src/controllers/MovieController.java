@@ -11,12 +11,10 @@ import java.util.List;
 
 public class MovieController implements IMovieController {
     private final IMovieRepository repo;
-    private final IReviewRepository reviewRepo;
 
 
-    public MovieController(IMovieRepository repo, IReviewRepository reviewRepo) {
+    public MovieController(IMovieRepository repo) {
         this.repo = repo;
-        this.reviewRepo = reviewRepo;
     }
 
     @Override
@@ -48,22 +46,6 @@ public class MovieController implements IMovieController {
         return response.toString();
     }
 
-    @Override
-    public String addReviewForMovie(int movieId, int userId, String reviewText) {
-        Review review = new Review(movieId, CurrentUser.getCurrentUser().getUser_id(), reviewText);
-        boolean created = reviewRepo.createReview(review);
-        return created ? "Review has been added." : "Error adding review.";
-    }
-
-    @Override
-    public String getReviewsByMovieId(int movieId) {
-        List<Review> reviews = reviewRepo.getReviewsByMovieId(movieId);
-        StringBuilder response = new StringBuilder();
-        for (Review review : reviews) {
-            response.append(review.toString()).append("\n");
-        }
-        return response.toString();
-    }
     @Override
     public String deleteMovie(int movieId) {
         boolean deleted = repo.deleteMovie(movieId);

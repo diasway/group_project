@@ -22,14 +22,13 @@ public class ReviewRepository implements IReviewRepository {
         Connection connection = null;
         try {
             connection = db.getConnection();
-            String sql = "INSERT INTO movie_reviews(movie_id, user_id, review_text) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO movie_reviews(movie_id, user_id, review_text, rating) VALUES (?, ?, ?, ?)";
             PreparedStatement st = connection.prepareStatement(sql);
 
             st.setInt(1, review.getMovieId());
             st.setInt(2, review.getUserId());
             st.setString(3, review.getReviewText());
-
-            st.execute();
+            st.setDouble(4, review.getRating());
 
             int affectedRows = st.executeUpdate();
             if (affectedRows > 0) {
@@ -47,7 +46,7 @@ public class ReviewRepository implements IReviewRepository {
         Connection connection = null;
         try {
             connection = db.getConnection();
-            String sql = "SELECT r.review_id, r.movie_id, r.user_id, r.review_text, u.user_name " +
+            String sql = "SELECT r.review_id, r.movie_id, r.user_id, r.review_text, r.rating , u.user_name " +
                     "FROM movie_reviews r " +
                     "JOIN users u ON r.user_id = u.user_id " +
                     "WHERE r.movie_id = ?";
@@ -62,6 +61,7 @@ public class ReviewRepository implements IReviewRepository {
                         rs.getInt("movie_id"),
                         rs.getInt("user_id"),
                         rs.getString("review_text"),
+                        rs.getDouble("rating"),
                         userName);
                 reviews.add(review);
             }
@@ -77,7 +77,7 @@ public class ReviewRepository implements IReviewRepository {
         Connection connection = null;
         try {
             connection = db.getConnection();
-            String sql = "SELECT r.review_id, r.movie_id, r.user_id, r.review_text, u.user_name " +
+            String sql = "SELECT r.review_id, r.movie_id, r.user_id, r.review_text, r.rating, u.user_name " +
                     "FROM movie_reviews r " +
                     "JOIN users u ON r.user_id = u.user_id " +
                     "WHERE r.user_id = ?";
@@ -90,7 +90,8 @@ public class ReviewRepository implements IReviewRepository {
                 Review review = new Review(rs.getInt("review_id"),
                         rs.getInt("movie_id"),
                         rs.getInt("user_id"),
-                        rs.getString("review_text"));
+                        rs.getString("review_text"),
+                        rs.getDouble("rating"));
                 reviews.add(review);
             }
             return reviews;
@@ -103,10 +104,11 @@ public class ReviewRepository implements IReviewRepository {
     @Override
     public boolean updateReview(Review review) {
         try (Connection connection = db.getConnection()) {
-            String sql = "UPDATE movie_reviews SET review_text = ? WHERE review_id = ?";
+            String sql = "UPDATE movie_reviews SET review_text = ?, rating = ? WHERE review_id = ?";
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, review.getReviewText());
-            st.setInt(2, review.getId());
+            st.setDouble(2,review.getRating());
+            st.setInt(3, review.getId());
             int affectedRows = st.executeUpdate();
             if (affectedRows > 0) {
                 movieRepository.updateMovieRating(review.getMovieId());
