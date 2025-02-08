@@ -69,10 +69,10 @@ public class User {
         return password;
     }
 
-    //Password validation: numbers only, 4-6 characters long
+    //Password validation: numbers only, 4-10 characters long
     public void setPassword(String password) {
-        if (password == null || !password.matches("\\d{4,6}")) {
-            throw new IllegalArgumentException("Password must be between 4 and 6 digits only");
+        if (password == null || !password.matches("\\d{4,10}")) {
+            throw new IllegalArgumentException("Password must be between 4 and 10 digits only");
         }
         this.password = password;
     }

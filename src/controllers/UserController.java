@@ -75,7 +75,7 @@ public class UserController implements IUserController {
     public String getAllUsers() {
         List<User> users = repo.getAllUsers();
         return users.stream()
-                .map(User::toString)  // Using method reference instead of lambda
+                .map(User::toString)
                 .reduce((a, b) -> a + "\n" + b)
                 .orElse("No users found");
     }
