@@ -1,13 +1,14 @@
 import controllers.interfaces.*;
 import models.*;
+import util.Validation;
 
-import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import static models.CurrentUser.getCurrentUser;
 
 public class MyApplication {
+    private final IAdministrationController admin_controller;
     private final IUserController user_controller;
     private final IMovieController movie_controller;
     private final IGenreController genre_controller;
@@ -16,7 +17,8 @@ public class MyApplication {
     private final Scanner scanner = new Scanner(System.in);
     private User user;
 
-    public MyApplication(IUserController user_controller, IMovieController movie_controller, IGenreController genre_controller, IReviewController reviewController, ICurrentUserController currentUser_controller) {
+    public MyApplication(IAdministrationController admin_controller, IUserController user_controller, IMovieController movie_controller, IGenreController genre_controller, IReviewController reviewController, ICurrentUserController currentUser_controller) {
+        this.admin_controller = admin_controller;
         this.user_controller = user_controller;
         this.movie_controller = movie_controller;
         this.genre_controller = genre_controller;
@@ -50,6 +52,9 @@ public class MyApplication {
                             UserPasswordCheckMenu();
                             break;
                         case 3:
+                            AdministrationMenu();
+                            break;
+                            case 4:
                             System.out.println(genre_controller.getAllGenres());
                             break;
                         default:
@@ -62,9 +67,83 @@ public class MyApplication {
                     System.out.println(e.getMessage());
                 }
             }
-            }
+        }
 
     }
+
+    public void AdministrationMenu() {
+            while (true) {
+                System.out.println("\nAdmin Menu:");
+                System.out.println("1. Create Administrator");
+                System.out.println("2. View Administrator by ID");
+                System.out.println("3. View All Administrators");
+                System.out.println("4. View User by ID");
+                System.out.println("5. Delete User");
+                System.out.println("6. View All Users");
+                System.out.println("0. Exit");
+                System.out.print("Choose an option: ");
+
+                int choice = scanner.nextInt();
+                scanner.nextLine();
+
+                switch (choice) {
+                    case 1:
+                        System.out.print("Enter name: ");
+                        String name = scanner.nextLine();
+                        if (!Validation.isValidName(name)) {
+                            System.out.println("Invalid name. Please enter a valid name.");
+                            break;
+                        }
+                        System.out.print("Enter password: ");
+                        String password = scanner.nextLine();
+                        if (!Validation.isValidPassword(password)) {
+                            System.out.println("Invalid password. Must be at least 6 characters long.");
+                            break;
+                        }
+                        System.out.println(admin_controller.createAdministration(name, password));
+                        break;
+                    case 2:
+                        System.out.print("Enter Administrator ID: ");
+                        int adminId = scanner.nextInt();
+                        if (!Validation.isValidId(adminId)) {
+                            System.out.println("Invalid ID. Please enter a positive number.");
+                            break;
+                        }
+                        System.out.println(admin_controller.getAdministrationById(adminId));
+                        break;
+                    case 3:
+                        System.out.println(admin_controller.getAllAdministrators());
+                        break;
+                    case 4:
+                        System.out.print("Enter User ID: ");
+                        int userId = scanner.nextInt();
+                        if (!Validation.isValidId(userId)) {
+                            System.out.println("Invalid ID. Please enter a positive number.");
+                            break;
+                        }
+                        System.out.println(admin_controller.viewUserById(userId));
+                        break;
+                    case 5:
+                        System.out.print("Enter User ID to delete: ");
+                        int delUserId = scanner.nextInt();
+                        if (!Validation.isValidId(delUserId)) {
+                            System.out.println("Invalid ID. Please enter a positive number.");
+                            break;
+                        }
+                        System.out.println(admin_controller.deleteUser(delUserId));
+                        break;
+                    case 6:
+                        System.out.println(admin_controller.getAllUsers());
+                        break;
+                    case 0:
+                        System.out.println("Exiting admin menu...");
+                        return;
+                    default:
+                        System.out.println("Invalid option. Try again.");
+                }
+            }
+        }
+
     private void UserPasswordCheckMenu(){
         System.out.println("Do you have an account?");
         System.out.println("1. Yes, log in to existing account");
@@ -181,8 +260,17 @@ public class MyApplication {
     private void getUserByName() {
         System.out.println("Please enter your name: ");
         String name = scanner.next();
+        if (!Validation.isValidName(name)) {
+            System.out.println("Invalid name. Name cannot be empty.");
+            return;
+        }
+
         System.out.println("Please enter your password: ");
         String password = scanner.next();
+        if (!Validation.isValidPassword(password)) {
+            System.out.println("Invalid password. Must be at least 6 characters.");
+            return;
+        }
 
         if (user_controller.getUserPassword(name, password)) {
             currentUser_controller.getUserInfo(name);
@@ -200,11 +288,20 @@ public class MyApplication {
         System.out.println("----------------------------------------");
     }
 
-    private void getUserById(){
+    private void getUserById() {
         System.out.println("Please enter user id: ");
-        int id = scanner.nextInt();
-        String response = user_controller.getUserById(id);
-        System.out.println(response);
+        try {
+            int id = scanner.nextInt();
+            if (!Validation.isValidId(id)) {
+                System.out.println("Invalid ID. ID must be greater than zero.");
+                return;
+            }
+            String response = user_controller.getUserById(id);
+            System.out.println(response);
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. ID must be a number.");
+            scanner.nextLine();
+        }
         System.out.println("----------------------------------------");
     }
 
@@ -281,7 +378,7 @@ public class MyApplication {
         double rating = scanner.nextDouble();
         System.out.println("Enter your review: ");
         String reviewText = scanner.nextLine();
-        String response = review_controller.addReviewForMovie(movieId,CurrentUser.getCurrentUser().getUser_id(), reviewText, rating);
+        String response = review_controller.addReviewForMovie(movieId, getCurrentUser().getUser_id(), reviewText, rating);
         System.out.println(response);
         System.out.println("----------------------------------------");
     }

@@ -8,6 +8,8 @@ import repositories.interfaces.*;
 public class Main {
     public static void main(String[] args) {
         IDB db = new PostgresDB("jdbc:postgresql://localhost:5432", "postgres", "LEMONBRO", "legion2");
+        IAdministrationRepository admin_repo = new AdministrationRepository(db);
+        IAdministrationController admin_controller = new AdministrationController(admin_repo);
         IUserRepository user_repo = new UserRepository(db);
         IUserController user_controller = new UserController(user_repo);
         IGenreRepository genre_repo = new GenreRepository(db);
@@ -19,7 +21,7 @@ public class Main {
         IMovieRepository movie_repo = new MovieRepository(db);
         IMovieController movie_controller = new MovieController(movie_repo);
 
-        MyApplication app = new MyApplication(user_controller,movie_controller,genre_controller,review_controller, currentUser_controller);
+        MyApplication app = new MyApplication(admin_controller,user_controller,movie_controller,genre_controller,review_controller, currentUser_controller);
         app.start();
         db.close();
     }
