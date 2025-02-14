@@ -38,34 +38,24 @@ public class MyApplication {
     public void start() {
 
         while (true) {
-            if (CurrentUser.isLogged()) {
-                UserMenu();
-            } else {
-                mainMenu();
-                try {                                                   //user or admin login
-                    int option = scanner.nextInt();
-                    switch (option) {
-                        case 1:
-                            MovieMenu();
-                            break;
-                        case 2:
-                            UserPasswordCheckMenu();
-                            break;
-                        case 3:
-                            AdministrationMenu();
-                            break;
-                            case 4:
-                            System.out.println(genre_controller.getAllGenres());
-                            break;
-                        default:
-                            return;
-                    }
-                } catch (InputMismatchException e) {
-                    System.out.println("Please enter a valid option!" + e);
-                    scanner.nextLine();
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
+            mainMenu();
+            try {                                                   //user or admin login
+                int option = scanner.nextInt();
+                switch (option) {
+                    case 1:
+                        AdminPasswordCheckMenu();
+                        break;
+                    case 2:
+                        UserPasswordCheckMenu();
+                        break;
+                    default:
+                        return;
                 }
+            } catch (InputMismatchException e) {
+                System.out.println("Please enter a valid option!" + e);
+                scanner.nextLine();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
         }
 
@@ -73,73 +63,60 @@ public class MyApplication {
 
     public void AdministrationMenu() {
             while (true) {
-                System.out.println("\nAdmin Menu:");
-                System.out.println("1. Create Administrator");
-                System.out.println("2. View Administrator by ID");
-                System.out.println("3. View All Administrators");
-                System.out.println("4. View User by ID");
-                System.out.println("5. Delete User");
-                System.out.println("6. View All Users");
+                System.out.println("\nAdmin & Movie Management Menu:");
+                System.out.println("1. View User by ID");
+                System.out.println("2. Delete User");
+                System.out.println("3. View All Users");
+                System.out.println("4. Get All Movies");
+                System.out.println("5. Get Movie by ID");
+                System.out.println("6. Upload a New Movie");
+                System.out.println("7. Upload a New Genre");
+                System.out.println("8. Delete Movie by ID");
+                System.out.println("9. Get Users Older Than 18");
                 System.out.println("0. Exit");
                 System.out.print("Choose an option: ");
 
-                int choice = scanner.nextInt();
-                scanner.nextLine();
+                try {
+                    int choice = scanner.nextInt();
+                    scanner.nextLine();
 
-                switch (choice) {
-                    case 1:
-                        System.out.print("Enter name: ");
-                        String name = scanner.nextLine();
-                        if (!Validation.isValidName(name)) {
-                            System.out.println("Invalid name. Please enter a valid name.");
+                    switch (choice) {
+                        case 1:
+                            getUserById();
                             break;
-                        }
-                        System.out.print("Enter password: ");
-                        String password = scanner.nextLine();
-                        if (!Validation.isValidPassword(password)) {
-                            System.out.println("Invalid password. Must be at least 6 characters long.");
+                        case 2:
+                            deleteUserMenu();
                             break;
-                        }
-                        System.out.println(admin_controller.createAdministration(name, password));
-                        break;
-                    case 2:
-                        System.out.print("Enter Administrator ID: ");
-                        int adminId = scanner.nextInt();
-                        if (!Validation.isValidId(adminId)) {
-                            System.out.println("Invalid ID. Please enter a positive number.");
+                        case 3:
+                            getAllUsersMenu();
                             break;
-                        }
-                        System.out.println(admin_controller.getAdministrationById(adminId));
-                        break;
-                    case 3:
-                        System.out.println(admin_controller.getAllAdministrators());
-                        break;
-                    case 4:
-                        System.out.print("Enter User ID: ");
-                        int userId = scanner.nextInt();
-                        if (!Validation.isValidId(userId)) {
-                            System.out.println("Invalid ID. Please enter a positive number.");
+                        case 4:
+                            getAllMoviesMenu();
                             break;
-                        }
-                        System.out.println(admin_controller.viewUserById(userId));
-                        break;
-                    case 5:
-                        System.out.print("Enter User ID to delete: ");
-                        int delUserId = scanner.nextInt();
-                        if (!Validation.isValidId(delUserId)) {
-                            System.out.println("Invalid ID. Please enter a positive number.");
+                        case 5:
+                            getMovieByIdMenu();
                             break;
-                        }
-                        System.out.println(admin_controller.deleteUser(delUserId));
-                        break;
-                    case 6:
-                        System.out.println(admin_controller.getAllUsers());
-                        break;
-                    case 0:
-                        System.out.println("Exiting admin menu...");
-                        return;
-                    default:
-                        System.out.println("Invalid option. Try again.");
+                        case 6:
+                            createMovieMenu();
+                            break;
+                        case 7:
+                            createGenreMenu();
+                            break;
+                        case 8:
+                            deleteMovieMenu();
+                            break;
+                        case 9:
+                            getAllUserOlder();
+                            break;
+                        case 0:
+                            System.out.println("Exiting admin & movie menu...");
+                            return;
+                        default:
+                            System.out.println("Invalid option. Try again.");
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("Please enter a valid number!");
+                    scanner.nextLine();
                 }
             }
         }
@@ -163,6 +140,18 @@ public class MyApplication {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+    private void AdminPasswordCheckMenu(){
+        System.out.println("Enter your admin username");
+        String name = scanner.next();
+        System.out.println("Enter your password");
+        String password = scanner.next();
+        boolean response = user_controller.getUserPassword(name,password);
+        if ((response) && admin_controller.getUserRoleByName(name).equals("admin")) {
+            System.out.println("Welcome " + name);
+            AdministrationMenu();
+        }
+        else System.out.println("Something went wrong");
     }
     private void UserMenu(){
         System.out.println("1. Profile");
@@ -194,41 +183,6 @@ public class MyApplication {
             System.out.println(e.getMessage());
         }
     }
-    private void MovieMenu(){
-        System.out.println("Welcome to movie centre");
-        System.out.println("Select the option:");
-        System.out.println("1. Get all users");
-        System.out.println("2. Get user by ID");
-        System.out.println("3. Get all movies");
-        System.out.println("4. Get movie by ID");
-        System.out.println("5. Upload a new movie");
-        System.out.println("6. Upload a new genre");
-        System.out.println("7. Delete movie by ID");
-        System.out.println("8. Get users who older than 18");
-        System.out.println("0. Exit");
-        System.out.println("Enter option: (1-6): ");
-        try {
-            int option = scanner.nextInt();
-            switch (option){
-                case 1 : getAllUsersMenu(); break;
-                case 2 : getUserById(); break;
-                case 3 : getAllMoviesMenu(); break;
-                case 4 : getMovieByIdMenu(); break;
-                case 5: createMovieMenu(); break;
-                case 6: createGenreMenu(); break;
-                case 7: deleteMovieMenu(); break;
-                case 8: getAllUserOlder(); break;
-                default: return;
-            }
-        }
-        catch (InputMismatchException e){
-            System.out.println("Input must be a number");
-            scanner.nextLine();
-        }
-        catch (Exception e){
-            System.out.println(e.getMessage());
-        }
-    }
 
     //user menus
     private void createUserMenu() {
@@ -245,8 +199,8 @@ public class MyApplication {
         System.out.println("Please enter password: ");
         System.out.println("Password must be between 4 and 6 digits only");
         String password = scanner.next();
-
-        String response = user_controller.createUser(name, age, gender, genre_id, password);
+        String role = "user";
+        String response = user_controller.createUser(name, age, gender, genre_id, password, role);
         currentUser_controller.getUserInfo(name);
         System.out.println(response);
         if (response.equals("User was created") && CurrentUser.isLogged()) {
@@ -274,7 +228,7 @@ public class MyApplication {
 
         if (user_controller.getUserPassword(name, password)) {
             currentUser_controller.getUserInfo(name);
-            System.out.println("Welcome, " + getCurrentUser().getUser_name());
+            System.out.println("Welcome, " + getCurrentUser().getName());
             UserMenu();
         } else {
             System.out.println("Incorrect password");
@@ -348,7 +302,7 @@ public class MyApplication {
     private void getCurrentUserInfo(){
         User currentUser = getCurrentUser();
         if (currentUser != null) {
-            System.out.println("Logged in as: " + currentUser.getUser_name());
+            System.out.println("Logged in as: " + currentUser.getName());
         } else {
             System.out.println("No user is logged in.");
         }
@@ -369,6 +323,12 @@ public class MyApplication {
         String response = movie_controller.deleteMovie(id);
         System.out.println("----------------------------------------");
     }
+    private void deleteUserMenu(){
+        System.out.println("Enter the ID of user you want delete: ");
+        int id = scanner.nextInt();
+        String response = user_controller.deleteUser(id);
+        System.out.println("----------------------------------------");
+    }
     private void addMovieReviewMenu() {
         getAllMoviesMenu();
         System.out.println("Enter movie ID: ");
@@ -378,7 +338,7 @@ public class MyApplication {
         double rating = scanner.nextDouble();
         System.out.println("Enter your review: ");
         String reviewText = scanner.nextLine();
-        String response = review_controller.addReviewForMovie(movieId, getCurrentUser().getUser_id(), reviewText, rating);
+        String response = review_controller.addReviewForMovie(movieId, getCurrentUser().getId(), reviewText, rating);
         System.out.println(response);
         System.out.println("----------------------------------------");
     }
@@ -390,7 +350,6 @@ public class MyApplication {
         String reviews = review_controller.getReviewsByMovieId(id);
         System.out.println("ID: " + id + " Reviews: ");
         System.out.println(reviews);
-        System.out.println("----------------------------------------");
     }
 
     private void logout() {

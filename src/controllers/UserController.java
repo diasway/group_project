@@ -14,10 +14,10 @@ public class UserController implements IUserController {
     }
 
     @Override
-    public String createUser(String name, int age, String gender, int genre_id, String password) {
+    public String createUser(String name, int age, String gender, int genre_id, String password, String role) {
         try {
             boolean male = gender.equalsIgnoreCase("male");
-            User user = new User(name, age, male, genre_id, password);
+            User user = new User(name, age, male, genre_id, password, role);
             boolean created = repo.createUser(user);
             return created ? "User was created" : "User creation failed";
         } catch (IllegalArgumentException e) {
@@ -43,13 +43,13 @@ public class UserController implements IUserController {
     }
 
     @Override
-    public String updateUser(int id, String name, int age, String gender, int preferred_genre, String password) {
+    public String updateUser(int id, String name, int age, String gender, int preferred_genre, String password, String role) {
         boolean male = gender.equalsIgnoreCase("male");
         User user = repo.getUserById(id);
         if (user == null) {
             return "User not found";
         }
-        boolean updated = repo.updateUser(new User(id, name, age, male, preferred_genre, password));
+        boolean updated = repo.updateUser(new User(id, name, age, male, preferred_genre, password, role));
         return (updated) ? "User was updated" : "User update failed";
     }
 
@@ -66,7 +66,7 @@ public class UserController implements IUserController {
             return "No users older than 18 found.";
         }
         return users.stream()
-                .map(user -> user.getUser_name() + " - " + user.getUser_age() + " years old")
+                .map(user -> user.getName() + " - " + user.getUser_age() + " years old")
                 .collect(Collectors.joining("\n"));
     }
 

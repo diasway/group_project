@@ -20,13 +20,15 @@ public class UserRepository implements IUserRepository {
     public boolean createUser(User user) {
             try (Connection connection = db.getConnection()) {
 
-                String sql = "INSERT INTO users(user_name, user_age, user_gender, genre_id, password) VALUES (?, ?, ?, ?, ?)";
+                String sql = "INSERT INTO users (user_name, user_age, user_gender, genre_id, password, role) VALUES (?, ?, ?, ?, ?, ?)";
                 PreparedStatement st = connection.prepareStatement(sql);
-                st.setString(1, user.getUser_name());
+                st.setString(1, user.getName());
                 st.setInt(2, user.getUser_age());
                 st.setBoolean(3, user.getUser_gender());
                 st.setInt(4, user.getGenre_id());
                 st.setString(5, user.getPassword());
+                st.setString(6, user.getRole());
+
 
                 return st.executeUpdate() > 0;
             } catch (SQLException e) {
@@ -40,7 +42,7 @@ public class UserRepository implements IUserRepository {
         Connection connection = null;
         try {
             connection = db.getConnection();
-            String sql = "SELECT u.user_id, u.user_name, u.user_age, u.user_gender, u.genre_id, u.password, g.genre_name " +
+            String sql = "SELECT u.user_id, u.user_name, u.user_age, u.user_gender, u.genre_id, u.password, u.role, g.genre_name " +
                     "FROM users u " +
                     "JOIN genres g ON u.genre_id = g.genre_id " +
                     "WHERE u.user_name = ?";
@@ -54,7 +56,9 @@ public class UserRepository implements IUserRepository {
                         rs.getInt("user_age"),
                         rs.getBoolean("user_gender"),
                         rs.getInt("genre_id"),
-                        rs.getString("password"));
+                        rs.getString("password"),
+                        rs.getString("role"));
+
                 user.setGenre_name(rs.getString("genre_name"));
                 return user;
             }
@@ -69,7 +73,7 @@ public class UserRepository implements IUserRepository {
         Connection connection = null;
         try {
             connection = db.getConnection();
-            String sql = "SELECT u.user_id, u.user_name, u.user_age, u.user_gender, u.genre_id, u.password, g.genre_name " +
+            String sql = "SELECT u.user_id, u.user_name, u.user_age, u.user_gender, u.genre_id, u.password, u.role,  g.genre_name " +
                     "FROM users u " +
                     "JOIN genres g ON u.genre_id = g.genre_id " +
                     "WHERE u.user_id = ?";
@@ -83,7 +87,8 @@ public class UserRepository implements IUserRepository {
                         rs.getInt("user_age"),
                         rs.getBoolean("user_gender"),
                         rs.getInt("genre_id"),
-                        rs.getString("password"));
+                        rs.getString("password"),
+                        rs.getString("role"));
                 user.setGenre_name(rs.getString("genre_name"));
                 return user;
             }
@@ -115,12 +120,12 @@ public class UserRepository implements IUserRepository {
         try (Connection connection = db.getConnection()) {
             String sql = "UPDATE users SET user_name = ?, user_age = ?, user_gender = ?, genre_id = ?, password = ? WHERE user_id = ?";
             PreparedStatement st = connection.prepareStatement(sql);
-            st.setString(1, user.getUser_name());
+            st.setString(1, user.getName());
             st.setInt(2, user.getUser_age());
             st.setBoolean(3, user.getUser_gender());
             st.setInt(4, user.getGenre_id());
             st.setString(5, user.getPassword());
-            st.setInt(6, user.getUser_id());
+            st.setInt(6, user.getId());
             return st.executeUpdate() > 0;
         } catch (SQLException e) {
             System.out.println("sql error: " + e.getMessage());
@@ -156,7 +161,8 @@ public class UserRepository implements IUserRepository {
                                 rs.getInt("user_age"),
                                 rs.getBoolean("user_gender"),
                                 rs.getInt("genre_id"),
-                                rs.getString("password")));
+                                rs.getString("password"),
+                                rs.getString("role")));
                     }
                 }
             } catch (SQLException e) {
@@ -170,7 +176,7 @@ public class UserRepository implements IUserRepository {
         Connection connection = null;
         try {
             connection = db.getConnection();
-            String sql = "SELECT u.user_id, u.user_name, u.user_age, u.user_gender, u.genre_id, u.password, g.genre_name " +
+            String sql = "SELECT u.user_id, u.user_name, u.user_age, u.user_gender, u.genre_id, u.password, u.role,  g.genre_name " +
                     "FROM users u " +
                     "JOIN genres g ON u.genre_id = g.genre_id";
             Statement st = connection.createStatement();
@@ -183,7 +189,8 @@ public class UserRepository implements IUserRepository {
                         rs.getInt("user_age"),
                         rs.getBoolean("user_gender"),
                         rs.getInt("genre_id"),
-                        rs.getString("password"));
+                        rs.getString("password"),
+                        rs.getString("role"));
                 user.setGenre_name(rs.getString("genre_name"));
                 users.add(user);
             }

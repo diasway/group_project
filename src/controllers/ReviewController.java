@@ -16,7 +16,7 @@ public class ReviewController implements IReviewController {
 
     @Override
     public String addReviewForMovie(int movieId, int userId, String reviewText, double rating) {
-        Review review = new Review(movieId, CurrentUser.getCurrentUser().getUser_id(), reviewText, rating);
+        Review review = new Review(movieId, CurrentUser.getCurrentUser().getId(), reviewText, rating);
         boolean created = repo.createReview(review);
         return created ? "Review has been added." : "Error adding review.";
     }

@@ -31,46 +31,12 @@ public class CurrentUserRepository implements repositories.interfaces.ICurrentUs
                         rs.getInt("user_age"),
                         rs.getBoolean("user_gender"),
                         rs.getInt("genre_id"),
-                        rs.getString("password"));
+                        rs.getString("password"),
+                        rs.getString("role"));
             }
         } catch (SQLException e) {
             System.out.println("sql error:" + e.getMessage());
         }
         return null;
-    }
-
-    @Override
-    public boolean updateUser(User user) {
-        try (Connection connection = db.getConnection()) {
-            String sql = "UPDATE users SET user_name = ?, user_age = ?, user_gender = ?, genre_id = ?, password = ? WHERE user_id = ?";
-            PreparedStatement st = connection.prepareStatement(sql);
-            st.setString(1, user.getUser_name());
-            st.setInt(2, user.getUser_age());
-            st.setBoolean(3, user.getUser_gender());
-            st.setInt(4, user.getGenre_id());
-            st.setString(5, user.getPassword());
-            st.setInt(6, user.getUser_id());
-
-            int affectedRows = st.executeUpdate();
-            return affectedRows > 0;
-        } catch (SQLException e) {
-            System.out.println("SQL Error: " + e.getMessage());
-        }
-        return false;
-    }
-
-    @Override
-    public boolean deleteUser(String name) {
-        try (Connection connection = db.getConnection()) {
-            String sql = "DELETE FROM users WHERE user_name = ?";
-            PreparedStatement st = connection.prepareStatement(sql);
-            st.setString(1, name);
-
-            int affectedRows = st.executeUpdate();
-            return affectedRows > 0;
-        } catch (SQLException e) {
-            System.out.println("SQL Error: " + e.getMessage());
-        }
-        return false;
     }
 }
